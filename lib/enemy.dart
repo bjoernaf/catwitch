@@ -5,8 +5,14 @@ class GeneralEnemy extends SpriteComponent {
   int spriteSize;
   int attackDamage;
   double fallingSpeed = 1;
+  double movementSpeed;
 
-  GeneralEnemy(this.life, this.spriteSize, this.attackDamage);
+  GeneralEnemy(
+    this.life,
+    this.spriteSize,
+    this.attackDamage,
+    this.movementSpeed,
+  );
 
   bool isFalling() {
     // TODO implement
@@ -35,17 +41,39 @@ class GeneralEnemy extends SpriteComponent {
     }
   }
 
-  // TODO Implement
+  void moveRight() {
+    // TODO Implement
+  }
 
+  void moveLeft() {
+    // TODO Implement
+  }
+
+  void jump() {
+    // TODO Implement
+  }
 }
 
 class ZombieEnemy extends GeneralEnemy {
-  ZombieEnemy(int life, int spriteSize, int attackDamage)
-      : super(life, spriteSize, attackDamage);
+  ZombieEnemy({
+    int life = 20,
+    int spriteSize = 1,
+    int attackDamage = 5,
+    double movementSpeed = 0.5,
+  }) : super(
+          life,
+          spriteSize,
+          attackDamage,
+          movementSpeed,
+        );
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     sprite = await Sprite.load("zombie.png");
+  }
+
+  void roam() {
+    // TODO: implement
   }
 }
