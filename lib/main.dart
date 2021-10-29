@@ -3,17 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 
-class Player extends PositionComponent {
-  static final _paint = Paint()..color = Colors.white;
-
-  @override
-    void render(Canvas canvas) {
-      super.render(canvas);
-      canvas.drawRect(size.toRect(), _paint);
-    }
-}
-
-
+import 'player.dart';
+import 'enemy.dart';
 
 class SpaceShooterGame extends FlameGame {
   @override
@@ -26,7 +17,7 @@ class SpaceShooterGame extends FlameGame {
       A.width = 50;
       A.height = 100;
       A.anchor = Anchor.center;
-      final PositionComponent B = Player();
+      final PositionComponent B = ZombieEnemy();
       B.position = size / 2;
       B.width = 50;
       B.height = 100;
@@ -36,6 +27,7 @@ class SpaceShooterGame extends FlameGame {
       add(B);
     }
 }
+
 
 
 void main() {
