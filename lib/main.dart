@@ -111,7 +111,6 @@ class SpaceShooterGame extends FlameGame
     if (taps[pointerId] != null) {
       type = taps[pointerId] ?? tapType.none;
     }
-    print("Untap of type $type");
 
     if (type == tapType.left) {
       A.moveLeft(false);

@@ -13,7 +13,6 @@ class Player extends MoveAndCollide {
     final shape = HitboxRectangle();
     current = AnimationState.shooting;
     addHitbox(shape);
-    sprite = await Sprite.load("witch.png");
   }
 
 }
