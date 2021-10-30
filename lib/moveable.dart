@@ -3,7 +3,14 @@ import 'package:flame/game.dart';
 
 import 'platform.dart';
 
-class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
+enum AnimationState {
+  idle,
+  running,
+  shooting,
+}
+
+class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
+    with Hitbox, Collidable {
   bool falling = true;
   bool doMoveLeft = false;
   bool doMoveRight = false;
@@ -14,8 +21,12 @@ class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
   bool jumping = false;
   Collidable? currentCollide;
 
+  MoveAndCollide(Map<AnimationState, SpriteAnimation> animations)
+      : super(animations: animations, current: AnimationState.idle);
+
   @override
   void update(double dt) {
+    super.update(dt);
     if (falling) {
       fallingSpeed += 9.82 * dt;
       position.y += fallingSpeed;

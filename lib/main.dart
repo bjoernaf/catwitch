@@ -37,13 +37,45 @@ class SpaceShooterGame extends FlameGame
     add(P2);
     add(P3);
 
-    A = Player();
+    final playerIdleSprite = await loadSprite("witch.png");
+    final playerIdleAnimation = SpriteAnimation.spriteList(
+      [playerIdleSprite],
+      stepTime: double.infinity,
+    );
+    //TODO: make loop
+    final playerShooting1 = await loadSprite("witchshooting1.png");
+    final playerShooting2 = await loadSprite("witchshooting2.png");
+    final playerShooting3 = await loadSprite("witchshooting3.png");
+    final playerShooting4 = await loadSprite("witchshooting4.png");
+    final playerShooting5 = await loadSprite("witchshooting5.png");
+    final playerShootingAnimation = SpriteAnimation.spriteList(
+      [
+        playerShooting1,
+        playerShooting2,
+        playerShooting3,
+        playerShooting4,
+        playerShooting5,
+        playerShooting4,
+        playerShooting3,
+        playerShooting2,
+      ],
+      stepTime: 0.1,
+    );
+    final playerAnimations = {
+      AnimationState.idle: playerIdleAnimation,
+      AnimationState.shooting: playerShootingAnimation
+    };
+    A = Player(playerAnimations);
     A.position.y = 200;
     A.position.x = size.x / 2;
     A.width = 50;
     A.height = 100;
     A.anchor = Anchor.center;
-    PositionComponent B = ZombieEnemy();
+    final zombieSprite = await loadSprite("zombie.png");
+    final zombieAnimation =
+        SpriteAnimation.spriteList([zombieSprite], stepTime: double.infinity);
+    final zombieAnimations = {AnimationState.idle: zombieAnimation};
+    final PositionComponent B = ZombieEnemy(zombieAnimations);
     B.position = size / 2;
     B.width = 50;
     B.height = 100;

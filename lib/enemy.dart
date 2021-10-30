@@ -3,12 +3,16 @@ import 'package:con/platform.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 
+import 'platform.dart';
+
 class GeneralEnemy extends MoveAndCollide {
   int life;
   int spriteSize;
   int attackDamage;
 
-  GeneralEnemy(this.life, this.spriteSize, this.attackDamage);
+  GeneralEnemy(Map<AnimationState, SpriteAnimation> animations, this.life,
+      this.spriteSize, this.attackDamage)
+      : super(animations);
 
   void die() {
     // TODO sprite die at position
@@ -25,12 +29,14 @@ class GeneralEnemy extends MoveAndCollide {
 }
 
 class ZombieEnemy extends GeneralEnemy {
-  ZombieEnemy({
+  ZombieEnemy(
+    Map<AnimationState, SpriteAnimation> animations, {
     int life = 20,
     int spriteSize = 1,
     int attackDamage = 5,
     double movementSpeed = 0.5,
   }) : super(
+          animations,
           life,
           spriteSize,
           attackDamage,
@@ -42,7 +48,6 @@ class ZombieEnemy extends GeneralEnemy {
     await super.onLoad();
     final shape = HitboxRectangle();
     addHitbox(shape);
-    sprite = await Sprite.load("zombie.png");
     roam();
   }
 
