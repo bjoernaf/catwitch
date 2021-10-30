@@ -1,24 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:flame/game.dart';
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flutter/material.dart';
 
-import 'player.dart';
 import 'enemy.dart';
 import 'platform.dart';
+import 'player.dart';
 
 double platformGridSizeX = 2;
 double platformGridSizeY = 2;
 
 class SpaceShooterGame extends FlameGame
     with HasCollidables, MultiTouchTapDetector {
-
   late final Player A;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-
+    debugMode = true;
     final Platform P1 = Platform();
     P1.width = 64 * platformGridSizeX;
     P1.height = 32 * platformGridSizeY;
@@ -40,14 +39,14 @@ class SpaceShooterGame extends FlameGame
     A.width = 50;
     A.height = 100;
     A.anchor = Anchor.center;
-    //final PositionComponent B = ZombieEnemy();
-    //B.position = size / 2;
-    //B.width = 50;
-    //B.height = 100;
-    //B.anchor = Anchor.center;
+    final PositionComponent B = ZombieEnemy();
+    B.position = size / 2;
+    B.width = 50;
+    B.height = 100;
+    B.anchor = Anchor.center;
 
     add(A);
-    //add(B);
+    add(B);
   }
 
   void onTapDown(int pointerId, TapDownInfo ti) {

@@ -1,32 +1,15 @@
+import 'package:con/moveable.dart';
 import 'package:flame/components.dart';
+import 'package:flame/geometry.dart';
 
-class GeneralEnemy extends SpriteComponent {
+import 'platform.dart';
+
+class GeneralEnemy extends MoveAndCollide {
   int life;
   int spriteSize;
   int attackDamage;
-  double fallingSpeed = 1;
-  double movementSpeed;
 
-  GeneralEnemy(
-    this.life,
-    this.spriteSize,
-    this.attackDamage,
-    this.movementSpeed,
-  );
-
-  bool isFalling() {
-    // TODO implement
-    return true;
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    while (isFalling()) {
-      fallingSpeed += 9.82 * dt;
-      position.y += fallingSpeed;
-    }
-  }
+  GeneralEnemy(this.life, this.spriteSize, this.attackDamage);
 
   void die() {
     // TODO sprite die at position
@@ -41,16 +24,17 @@ class GeneralEnemy extends SpriteComponent {
     }
   }
 
-  void moveRight() {
-    // TODO Implement
+  // TODO Duplicate of Player methods, should have joint parent class
+  void onCollision(Set<Vector2> points, Collidable other) {
+    if (other is Platform) {
+      falling = false;
+    }
   }
 
-  void moveLeft() {
-    // TODO Implement
-  }
-
-  void jump() {
-    // TODO Implement
+  void onCollisionEnd(Collidable other) {
+    if (other is Platform) {
+      falling = true;
+    }
   }
 }
 
@@ -64,12 +48,14 @@ class ZombieEnemy extends GeneralEnemy {
           life,
           spriteSize,
           attackDamage,
-          movementSpeed,
         );
 
   @override
   Future<void> onLoad() async {
+    movementSpeed = 0.5;
     await super.onLoad();
+    final shape = HitboxRectangle();
+    addHitbox(shape);
     sprite = await Sprite.load("zombie.png");
   }
 

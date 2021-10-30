@@ -1,19 +1,15 @@
-import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 
-import 'platform.dart';
+import 'moveable.dart';
 
-class Player extends SpriteComponent with Hitbox, Collidable {
-  bool falling = true;
-  bool doMoveLeft = false;
-  bool doMoveRight = false;
-  bool doJump = false;
+class Player extends MoveAndCollide {
   bool facingRight = true;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    movementSpeed = 1;
     final shape = HitboxRectangle();
     addHitbox(shape);
     sprite = await Sprite.load("witch.png");
@@ -29,7 +25,7 @@ class Player extends SpriteComponent with Hitbox, Collidable {
     if (doMoveLeft) {
       position.x -= 100.0 * dt;
       doMoveLeft = false;
-      if (facingRight){
+      if (facingRight) {
         flipHorizontally();
         facingRight = false;
       }
@@ -37,27 +33,13 @@ class Player extends SpriteComponent with Hitbox, Collidable {
     if (doMoveRight) {
       position.x += 100.0 * dt;
       doMoveRight = false;
-      if (!facingRight){
+      if (!facingRight) {
         flipHorizontally();
         facingRight = true;
       }
     }
     if (doJump) {
       // TODO Do nsomething beautiful
-    }
-  }
-
-  void onCollision(Set<Vector2> points, Collidable other) {
-    print("Collided with $other");
-    if (other is Platform) {
-      falling = false;
-    }
-  }
-
-  void onCollisionEnd(Collidable other) {
-    print("Stopped colliding with $other");
-    if (other is Platform) {
-      falling = true;
     }
   }
 
