@@ -55,6 +55,8 @@ class ZombieEnemy extends GeneralEnemy {
   }
 
   void roam() {
+    moveLeft(false);
+    moveRight(false);
     if (!(currentCollide == null) && (currentCollide is Platform)) {
       double xmin = currentCollide!.position.x + size.x / 2;
       double xmax =
@@ -62,13 +64,13 @@ class ZombieEnemy extends GeneralEnemy {
 
       if (facingRight) {
         if (position.x < xmax) {
-          moveRight();
+          moveRight(true);
         } else {
           facingRight = false;
         }
       } else {
         if (position.x > xmin) {
-          moveLeft();
+          moveLeft(true);
         } else {
           facingRight = true;
         }

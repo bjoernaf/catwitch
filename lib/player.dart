@@ -15,4 +15,5 @@ class Player extends MoveAndCollide {
     current = AnimationState.shooting;
     addHitbox(shape);
   }
+
 }

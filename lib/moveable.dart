@@ -39,7 +39,6 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
     }
     if (doMoveLeft) {
       position.x -= 100.0 * movementSpeed * dt;
-      doMoveLeft = false;
       if (facingRight) {
         flipHorizontally();
         facingRight = false;
@@ -47,7 +46,6 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
     }
     if (doMoveRight) {
       position.x += 100.0 * movementSpeed * dt;
-      doMoveRight = false;
       if (!facingRight) {
         flipHorizontally();
         facingRight = true;
@@ -88,12 +86,12 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
     }
   }
 
-  void moveLeft() {
-    doMoveLeft = true;
+  void moveLeft(bool b) {
+    doMoveLeft = b;
   }
 
-  void moveRight() {
-    doMoveRight = true;
+  void moveRight(bool b) {
+    doMoveRight = b;
   }
 
   void jump() {
