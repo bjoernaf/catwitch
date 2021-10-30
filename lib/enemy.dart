@@ -1,8 +1,7 @@
 import 'package:con/moveable.dart';
+import 'package:con/platform.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
-
-import 'platform.dart';
 
 class GeneralEnemy extends MoveAndCollide {
   int life;
@@ -21,19 +20,6 @@ class GeneralEnemy extends MoveAndCollide {
       die();
     } else {
       life = newLife;
-    }
-  }
-
-  // TODO Duplicate of Player methods, should have joint parent class
-  void onCollision(Set<Vector2> points, Collidable other) {
-    if (other is Platform) {
-      falling = false;
-    }
-  }
-
-  void onCollisionEnd(Collidable other) {
-    if (other is Platform) {
-      falling = true;
     }
   }
 }
@@ -57,9 +43,27 @@ class ZombieEnemy extends GeneralEnemy {
     final shape = HitboxRectangle();
     addHitbox(shape);
     sprite = await Sprite.load("zombie.png");
+    roam();
   }
 
   void roam() {
-    // TODO: implement
+    if (!(currentCollide == null) & (currentCollide is Platform)) {
+      double xmin = currentCollide!.position.x;
+      double xmax = currentCollide!.position.x + size.x;
+
+      if (facingRight) {
+        if (position.x < xmax) {
+          moveRight();
+        } else {
+          facingRight = false;
+        }
+      } else {
+        if (position.x > xmin) {
+          moveLeft();
+        } else {
+          facingRight = true;
+        }
+      }
+    }
   }
 }

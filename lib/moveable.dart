@@ -12,6 +12,7 @@ class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
   double fallingSpeed = 1;
   double movementSpeed = 1;
   bool jumping = false;
+  Collidable? currentCollide;
 
   @override
   void update(double dt) {
@@ -50,6 +51,7 @@ class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
 
   @override
   void onCollision(Set<Vector2> points, Collidable other) {
+    currentCollide = other;
     if (other is Platform) {
       falling = false;
       if (position.y < (other.position.y + size.y / 2)) {
@@ -65,6 +67,7 @@ class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
 
   @override
   void onCollisionEnd(Collidable other) {
+    currentCollide = null;
     if (other is Platform) {
       falling = true;
     }

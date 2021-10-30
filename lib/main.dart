@@ -43,7 +43,7 @@ class SpaceShooterGame extends FlameGame
     A.width = 50;
     A.height = 100;
     A.anchor = Anchor.center;
-    final PositionComponent B = ZombieEnemy();
+    PositionComponent B = ZombieEnemy();
     B.position = size / 2;
     B.width = 50;
     B.height = 100;
