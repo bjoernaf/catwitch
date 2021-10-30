@@ -1,3 +1,5 @@
+import 'package:con/enemy.dart';
+import 'package:con/player.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
@@ -131,6 +133,41 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
   }
 
   void die() {
+    removeFromParent();
+  }
+}
+
+class Shoot extends SpriteAnimationGroupComponent<AnimationState>
+    with Hitbox, Collidable {
+  late bool faceRight;
+  late int speed;
+  late int dmg;
+  late bool mosterShoot;
+
+  Shoot(
+    Map<AnimationState, SpriteAnimation> animations,
+  ) : super(
+          animations: animations,
+          current: AnimationState.idle,
+        );
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (faceRight) {
+      position.x += speed * dt;
+    } else {
+      position.x -= speed * dt;
+    }
+  }
+
+  @override
+  void onCollision(Set<Vector2> points, Collidable other) {
+    if ((other is Player) && mosterShoot) {
+      other.takeDamage(dmg);
+    } else if ((other is GeneralEnemy) && !mosterShoot) {
+      other.takeDamage(dmg);
+    }
     removeFromParent();
   }
 }
