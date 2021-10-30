@@ -4,8 +4,6 @@ import 'package:flame/geometry.dart';
 import 'moveable.dart';
 
 class Player extends MoveAndCollide {
-  bool facingRight = true;
-
   @override
   Future<void> onLoad() async {
     await super.onLoad();
