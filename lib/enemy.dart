@@ -1,29 +1,27 @@
 import 'package:con/moveable.dart';
 import 'package:con/platform.dart';
+import 'package:con/player.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 
 import 'platform.dart';
 
 class GeneralEnemy extends MoveAndCollide {
-  int life;
   int spriteSize;
   int attackDamage;
 
-  GeneralEnemy(Map<AnimationState, SpriteAnimation> animations, this.life,
-      this.spriteSize, this.attackDamage)
-      : super(animations);
+  GeneralEnemy(
+    Map<AnimationState, SpriteAnimation> animations,
+    int life,
+    this.spriteSize,
+    this.attackDamage,
+  ) : super(animations, life);
 
-  void die() {
-    // TODO sprite die at position
-  }
-
-  void takeDamaged(int dmg) {
-    int newLife = life - dmg;
-    if (life < 0) {
-      die();
-    } else {
-      life = newLife;
+  @override
+  void onCollision(Set<Vector2> points, Collidable other) {
+    super.onCollision(points, other);
+    if (other is Player) {
+      other.takeDamage(attackDamage);
     }
   }
 }
