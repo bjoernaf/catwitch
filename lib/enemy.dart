@@ -48,13 +48,19 @@ class ZombieEnemy extends GeneralEnemy {
     await super.onLoad();
     final shape = HitboxRectangle();
     addHitbox(shape);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
     roam();
   }
 
   void roam() {
-    if (!(currentCollide == null) & (currentCollide is Platform)) {
-      double xmin = currentCollide!.position.x;
-      double xmax = currentCollide!.position.x + size.x;
+    if (!(currentCollide == null) && (currentCollide is Platform)) {
+      double xmin = currentCollide!.position.x + size.x / 2;
+      double xmax =
+          currentCollide!.position.x + currentCollide!.size.x - size.x / 2;
 
       if (facingRight) {
         if (position.x < xmax) {

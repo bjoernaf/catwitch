@@ -86,6 +86,7 @@ class SpaceShooterGame extends FlameGame
     add(B);
   }
 
+  @override
   void onTapDown(int pointerId, TapDownInfo ti) {
     double x = ti.eventPosition.global.x;
     double y = ti.eventPosition.global.y;
