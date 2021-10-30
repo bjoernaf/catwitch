@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
@@ -10,6 +9,7 @@ class Player extends SpriteComponent with Hitbox, Collidable {
   bool doMoveLeft = false;
   bool doMoveRight = false;
   bool doJump = false;
+  bool facingRight = true;
 
   @override
   Future<void> onLoad() async {
@@ -21,6 +21,7 @@ class Player extends SpriteComponent with Hitbox, Collidable {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (falling) {
       // TODO HARDCODEED
       position.y += 200.0 * dt;
@@ -28,10 +29,18 @@ class Player extends SpriteComponent with Hitbox, Collidable {
     if (doMoveLeft) {
       position.x -= 100.0 * dt;
       doMoveLeft = false;
+      if (facingRight){
+        flipHorizontally();
+        facingRight = false;
+      }
     }
     if (doMoveRight) {
       position.x += 100.0 * dt;
       doMoveRight = false;
+      if (!facingRight){
+        flipHorizontally();
+        facingRight = true;
+      }
     }
     if (doJump) {
       // TODO Do nsomething beautiful
