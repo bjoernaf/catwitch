@@ -11,6 +11,7 @@ class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
   bool facingRight = false;
   double fallingSpeed = 1;
   double movementSpeed = 1;
+  bool jumping = false;
 
   @override
   void update(double dt) {
@@ -37,7 +38,13 @@ class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
       }
     }
     if (doJump) {
-      fallingSpeed = -100;
+      if (!jumping) {
+        jumping = true;
+        fallingSpeed = -10;
+        position.y -= 10;
+        falling = true;
+      }
+      doJump = false;
     }
   }
 
@@ -45,6 +52,14 @@ class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
   void onCollision(Set<Vector2> points, Collidable other) {
     if (other is Platform) {
       falling = false;
+      if (position.y < (other.position.y + size.y / 2)) {
+        jumping = false;
+        position.y = other.position.y - size.y / 2;
+      } else {
+        fallingSpeed = 1;
+        falling = true;
+        position.y = other.position.y + other.size.y + size.y / 2;
+      }
     }
   }
 
