@@ -3,7 +3,14 @@ import 'package:flame/game.dart';
 
 import 'platform.dart';
 
-class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
+enum AnimationState {
+  idle,
+  running,
+  shooting,
+}
+
+class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
+    with Hitbox, Collidable {
   bool falling = true;
   bool doMoveLeft = false;
   bool doMoveRight = false;
@@ -12,9 +19,14 @@ class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
   double fallingSpeed = 1;
   double movementSpeed = 1;
   bool jumping = false;
+  Collidable? currentCollide;
+
+  MoveAndCollide(Map<AnimationState, SpriteAnimation> animations)
+      : super(animations: animations, current: AnimationState.idle);
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (falling) {
       fallingSpeed += 9.82 * dt;
       position.y += fallingSpeed;
@@ -29,7 +41,7 @@ class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
       }
     }
     if (doMoveRight) {
-      position.x += 100.0 * dt;
+      position.x += 100.0 * movementSpeed * dt;
       if (!facingRight) {
         flipHorizontally();
         facingRight = true;
@@ -48,6 +60,7 @@ class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
 
   @override
   void onCollision(Set<Vector2> points, Collidable other) {
+    currentCollide = other;
     if (other is Platform) {
       falling = false;
       if (position.y < (other.position.y + size.y / 2)) {
@@ -63,6 +76,7 @@ class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
 
   @override
   void onCollisionEnd(Collidable other) {
+    currentCollide = null;
     if (other is Platform) {
       falling = true;
     }

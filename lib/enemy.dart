@@ -1,4 +1,5 @@
 import 'package:con/moveable.dart';
+import 'package:con/platform.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 
@@ -9,7 +10,9 @@ class GeneralEnemy extends MoveAndCollide {
   int spriteSize;
   int attackDamage;
 
-  GeneralEnemy(this.life, this.spriteSize, this.attackDamage);
+  GeneralEnemy(Map<AnimationState, SpriteAnimation> animations, this.life,
+      this.spriteSize, this.attackDamage)
+      : super(animations);
 
   void die() {
     // TODO sprite die at position
@@ -23,28 +26,17 @@ class GeneralEnemy extends MoveAndCollide {
       life = newLife;
     }
   }
-
-  // TODO Duplicate of Player methods, should have joint parent class
-  void onCollision(Set<Vector2> points, Collidable other) {
-    if (other is Platform) {
-      falling = false;
-    }
-  }
-
-  void onCollisionEnd(Collidable other) {
-    if (other is Platform) {
-      falling = true;
-    }
-  }
 }
 
 class ZombieEnemy extends GeneralEnemy {
-  ZombieEnemy({
+  ZombieEnemy(
+    Map<AnimationState, SpriteAnimation> animations, {
     int life = 20,
     int spriteSize = 1,
     int attackDamage = 5,
     double movementSpeed = 0.5,
   }) : super(
+          animations,
           life,
           spriteSize,
           attackDamage,
@@ -56,10 +48,33 @@ class ZombieEnemy extends GeneralEnemy {
     await super.onLoad();
     final shape = HitboxRectangle();
     addHitbox(shape);
-    sprite = await Sprite.load("zombie.png");
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    roam();
   }
 
   void roam() {
-    // TODO: implement
+    if (!(currentCollide == null) && (currentCollide is Platform)) {
+      double xmin = currentCollide!.position.x + size.x / 2;
+      double xmax =
+          currentCollide!.position.x + currentCollide!.size.x - size.x / 2;
+
+      if (facingRight) {
+        if (position.x < xmax) {
+          moveRight();
+        } else {
+          facingRight = false;
+        }
+      } else {
+        if (position.x > xmin) {
+          moveLeft();
+        } else {
+          facingRight = true;
+        }
+      }
+    }
   }
 }
