@@ -8,7 +8,7 @@ import "moveable.dart";
 import 'platform.dart';
 import 'player.dart';
 
-enum tapType {none, left, right, jump}
+enum tapType {none, left, right, jump, shoot}
 
 class SpaceShooterGame extends FlameGame
     with HasCollidables, MultiTouchTapDetector {
@@ -103,6 +103,10 @@ class SpaceShooterGame extends FlameGame
     } else if (y > size.y * 4.0 / 5.0) {
       A.jump();
       taps[pointerId] = tapType.jump;
+    } else if (x >= size.x / 3 && x <=size.x * 2 / 3 &&
+               y <= size.y * 4.0 / 5.0) {
+      A.shoot();
+      taps[pointerId] = tapType.shoot;
     }
   }
 

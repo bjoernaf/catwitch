@@ -15,6 +15,7 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
   bool doMoveLeft = false;
   bool doMoveRight = false;
   bool doJump = false;
+  bool doShoot = false;
   bool facingRight = false;
   double fallingSpeed = 1;
   double movementSpeed = 1;
@@ -92,5 +93,9 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
 
   void jump() {
     doJump = true;
+  }
+
+  void shoot() {
+    doShoot = true;
   }
 }
