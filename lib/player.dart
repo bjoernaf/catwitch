@@ -15,34 +15,6 @@ class Player extends MoveAndCollide {
     sprite = await Sprite.load("witch.png");
   }
 
-  @override
-  void update(double dt) {
-    super.update(dt);
-    if (falling) {
-      // TODO HARDCODEED
-      position.y += 200.0 * dt;
-    }
-    if (doMoveLeft) {
-      position.x -= 100.0 * dt;
-      doMoveLeft = false;
-      if (facingRight) {
-        flipHorizontally();
-        facingRight = false;
-      }
-    }
-    if (doMoveRight) {
-      position.x += 100.0 * dt;
-      doMoveRight = false;
-      if (!facingRight) {
-        flipHorizontally();
-        facingRight = true;
-      }
-    }
-    if (doJump) {
-      // TODO Do nsomething beautiful
-    }
-  }
-
   void moveLeft() {
     doMoveLeft = true;
   }
