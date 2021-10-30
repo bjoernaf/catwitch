@@ -4,6 +4,7 @@ import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
 import 'enemy.dart';
+import "moveable.dart";
 import 'platform.dart';
 import 'player.dart';
 
