@@ -23,7 +23,6 @@ class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
     }
     if (doMoveLeft) {
       position.x -= 100.0 * movementSpeed * dt;
-      doMoveLeft = false;
       if (facingRight) {
         flipHorizontally();
         facingRight = false;
@@ -31,7 +30,6 @@ class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
     }
     if (doMoveRight) {
       position.x += 100.0 * dt;
-      doMoveRight = false;
       if (!facingRight) {
         flipHorizontally();
         facingRight = true;
@@ -70,12 +68,12 @@ class MoveAndCollide extends SpriteComponent with Hitbox, Collidable {
     }
   }
 
-  void moveLeft() {
-    doMoveLeft = true;
+  void moveLeft(bool b) {
+    doMoveLeft = b;
   }
 
-  void moveRight() {
-    doMoveRight = true;
+  void moveRight(bool b) {
+    doMoveRight = b;
   }
 
   void jump() {

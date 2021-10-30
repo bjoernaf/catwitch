@@ -7,6 +7,8 @@ import 'enemy.dart';
 import 'platform.dart';
 import 'player.dart';
 
+enum tapType {none, left, right, jump}
+
 class SpaceShooterGame extends FlameGame
     with HasCollidables, MultiTouchTapDetector {
   late final Player A;
@@ -53,18 +55,48 @@ class SpaceShooterGame extends FlameGame
     add(B);
   }
 
+  final Map<int, tapType> taps = {};
+
   void onTapDown(int pointerId, TapDownInfo ti) {
     double x = ti.eventPosition.global.x;
     double y = ti.eventPosition.global.y;
 
     if (x < size.x / 3) {
-      A.moveLeft();
+      A.moveLeft(true);
+      taps[pointerId] = tapType.left;
     } else if (x > size.x * 2 / 3) {
-      A.moveRight();
+      A.moveRight(true);
+      taps[pointerId] = tapType.right;
     } else if (y > size.y * 4.0 / 5.0) {
       A.jump();
+      taps[pointerId] = tapType.jump;
     }
   }
+
+  void handleTapEnding(int pointerId) {
+    tapType type = tapType.none;
+    if (taps[pointerId] != null) {
+      type = taps[pointerId] ?? tapType.none;
+    }
+    print("Untap of type $type");
+
+    if (type == tapType.left) {
+      A.moveLeft(false);
+    } else if (type == tapType.right) {
+      A.moveRight(false);
+    }
+
+    taps.remove(pointerId);
+  }
+
+  void onTapUp(int pointerId, _) {
+    handleTapEnding(pointerId);
+  }
+
+  void onTapCancel(int pointerId) {
+    handleTapEnding(pointerId);
+  }
+
 }
 
 void main() {

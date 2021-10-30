@@ -13,15 +13,4 @@ class Player extends MoveAndCollide {
     sprite = await Sprite.load("witch.png");
   }
 
-  void moveLeft() {
-    doMoveLeft = true;
-  }
-
-  void moveRight() {
-    doMoveRight = true;
-  }
-
-  void jump() {
-    doJump = true;
-  }
 }
