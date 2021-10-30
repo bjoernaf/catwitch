@@ -10,7 +10,7 @@ enum AnimationState {
 }
 
 class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
-    with Hitbox, Collidable {
+    with Hitbox, Collidable, HasGameRef {
   int life;
   bool falling = true;
   bool doMoveLeft = false;
@@ -22,8 +22,11 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
   double movementSpeed = 1;
   bool jumping = false;
   Collidable? currentCollide;
+  Shot? shot;
+  double shotTimeout = 1;
   double invulnerability = 1;
   static const double maxInvulnerability = 1;
+  static const double maxShotTimeout = 1;
 
   MoveAndCollide(Map<AnimationState, SpriteAnimation> animations, this.life)
       : super(
@@ -63,6 +66,15 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
         falling = true;
       }
       doJump = false;
+    }
+    if (doShoot) {
+      if (shot != null && shotTimeout <= 0) {
+        shot.position.x = position.x;
+        shot.position.y = position.y;
+        gameRef.add(shot);
+        doShoot = false;
+      }
+      shotTimeout = maxShotTimeout;
     }
   }
 
