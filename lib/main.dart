@@ -12,11 +12,9 @@ import 'player.dart';
 enum tapType { none, left, right, jump, shoot }
 
 class Background extends SpriteComponent with HasGameRef {
-
   Background(Vector2 size, Sprite sprite) : super(size: size, sprite: sprite);
 
-  Future<void> onLoad() async {
-  }
+  Future<void> onLoad() async {}
 
   @override
   void onResize() {
@@ -30,7 +28,6 @@ class Background extends SpriteComponent with HasGameRef {
     position.x = gameRef.camera.position.x;
     position.y = gameRef.camera.position.y;
   }
-
 }
 
 class SpaceShooterGame extends FlameGame
@@ -137,6 +134,7 @@ class SpaceShooterGame extends FlameGame
 
   final Map<int, tapType> taps = {};
 
+  @override
   void onTapDown(int pointerId, TapDownInfo ti) {
     double x = ti.eventPosition.global.x;
     double y = ti.eventPosition.global.y;
@@ -173,10 +171,12 @@ class SpaceShooterGame extends FlameGame
     taps.remove(pointerId);
   }
 
+  @override
   void onTapUp(int pointerId, _) {
     handleTapEnding(pointerId);
   }
 
+  @override
   void onTapCancel(int pointerId) {
     handleTapEnding(pointerId);
   }
