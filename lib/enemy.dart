@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 
 import 'platform.dart';
+import 'animationstate.dart';
 
 class GeneralEnemy extends MoveAndCollide {
   int spriteSize;
@@ -12,9 +13,9 @@ class GeneralEnemy extends MoveAndCollide {
 
   GeneralEnemy(
     Map<AnimationState, SpriteAnimation> animations,
-    int life,
     this.spriteSize,
     this.attackDamage,
+    int life
   ) : super(animations, life);
 
   @override
@@ -35,17 +36,15 @@ class ZombieEnemy extends GeneralEnemy {
     double movementSpeed = 0.5,
   }) : super(
           animations,
-          life,
           spriteSize,
           attackDamage,
+          life,
         );
 
   @override
   Future<void> onLoad() async {
     movementSpeed = 0.5;
     await super.onLoad();
-    final shape = HitboxRectangle();
-    addHitbox(shape);
   }
 
   @override

@@ -2,14 +2,12 @@ import 'package:con/enemy.dart';
 import 'package:con/player.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 
 import 'platform.dart';
-
-enum AnimationState {
-  idle,
-  running,
-  shooting,
-}
+import 'shoot.dart';
+import 'animationstate.dart';
+import 'moveable.dart';
 
 class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
     with Hitbox, Collidable, HasGameRef {
@@ -24,9 +22,9 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
   double movementSpeed = 1;
   bool jumping = false;
   Collidable? currentCollide;
-  Shot? shot;
+  Shoot? shot;
   double shotTimeout = 1;
-  double invulnerability = 1;
+  double invulnerability = 0;
   static const double maxInvulnerability = 1;
   static const double maxShotTimeout = 1;
 
@@ -37,9 +35,17 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
         );
 
   @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    final shape = HitboxRectangle();
+    addHitbox(shape);
+  }
+
+  @override
   void update(double dt) {
     super.update(dt);
     invulnerability -= dt;
+    shotTimeout -= dt;
     if (falling) {
       fallingSpeed += 9.82 * dt;
       position.y += fallingSpeed;
@@ -70,13 +76,19 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
       doJump = false;
     }
     if (doShoot) {
+      print("try shot");
       if (shot != null && shotTimeout <= 0) {
-        shot.position.x = position.x;
-        shot.position.y = position.y;
-        gameRef.add(shot);
-        doShoot = false;
+        double step = 1;
+        print("shooting!");
+        if (!facingRight) {
+          step = -1;
+        }
+        shot?.position.x = position.x + step * size.x/2;
+        shot?.position.y = position.y;
+        gameRef.add(shot!);
+        shotTimeout = maxShotTimeout;
       }
-      shotTimeout = maxShotTimeout;
+      doShoot = false;
     }
   }
 
@@ -121,14 +133,16 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
   }
 
   void takeDamage(int dmg) {
+    print("life is $life taking damage $dmg");
     if (invulnerability <= 0) {
-      int newLife = life - dmg;
-      if (life < 0) {
+      life -= dmg;
+      print("  new life is $life taking damage $dmg");
+      if (life <= 0) {
         die();
-      } else {
-        life = newLife;
       }
-      invulnerability = maxInvulnerability;
+      if (this is Player) {
+        invulnerability = maxInvulnerability;
+      }
     }
   }
 
@@ -137,37 +151,3 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
   }
 }
 
-class Shoot extends SpriteAnimationGroupComponent<AnimationState>
-    with Hitbox, Collidable {
-  late bool faceRight;
-  late int speed;
-  late int dmg;
-  late bool mosterShoot;
-
-  Shoot(
-    Map<AnimationState, SpriteAnimation> animations,
-  ) : super(
-          animations: animations,
-          current: AnimationState.idle,
-        );
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    if (faceRight) {
-      position.x += speed * dt;
-    } else {
-      position.x -= speed * dt;
-    }
-  }
-
-  @override
-  void onCollision(Set<Vector2> points, Collidable other) {
-    if ((other is Player) && mosterShoot) {
-      other.takeDamage(dmg);
-    } else if ((other is GeneralEnemy) && !mosterShoot) {
-      other.takeDamage(dmg);
-    }
-    removeFromParent();
-  }
-}

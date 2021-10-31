@@ -7,6 +7,7 @@ import 'enemy.dart';
 import "moveable.dart";
 import 'platform.dart';
 import 'player.dart';
+import 'animationstate.dart';
 
 enum tapType {none, left, right, jump, shoot}
 
