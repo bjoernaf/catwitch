@@ -143,7 +143,7 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
     print("life is $life taking damage $dmg");
     if (invulnerability <= 0) {
       if (this is Player) {
-        gameRef.camera.shake();
+        gameRef.camera.shake(intensity: 30);
       }
       life -= dmg;
       if (life <= 0) {

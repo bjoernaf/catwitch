@@ -125,6 +125,7 @@ class SpaceShooterGame extends FlameGame
         catAngrySprites[6],
       ],
       stepTime: 0.1,
+      loop: false,
     );
     final catAnimations = {
       AnimationState.idle: catTailAnimations,
