@@ -72,12 +72,14 @@ class ZombieEnemy extends GeneralEnemy {
           moveRight(true);
         } else {
           facingRight = false;
+          flipHorizontally();
         }
       } else {
         if (position.x > xmin) {
           moveLeft(true);
         } else {
           facingRight = true;
+          flipHorizontally();
         }
       }
     }

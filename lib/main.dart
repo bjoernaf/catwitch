@@ -11,6 +11,28 @@ import 'player.dart';
 
 enum tapType { none, left, right, jump, shoot }
 
+class Background extends SpriteComponent with HasGameRef {
+
+  Background(Vector2 size, Sprite sprite) : super(size: size, sprite: sprite);
+
+  Future<void> onLoad() async {
+  }
+
+  @override
+  void onResize() {
+    width = gameRef.size.x;
+    height = gameRef.size.y;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    position.x = gameRef.camera.position.x;
+    position.y = gameRef.camera.position.y;
+  }
+
+}
+
 class SpaceShooterGame extends FlameGame
     with HasCollidables, MultiTouchTapDetector {
   late final Player player;
@@ -19,6 +41,13 @@ class SpaceShooterGame extends FlameGame
   Future<void> onLoad() async {
     await super.onLoad();
     debugMode = true;
+
+    final sprite = await Sprite.load('bg.png');
+    Background bg = Background(size, sprite);
+    bg.position.x = 0;
+    bg.position.y = 0;
+    add(bg);
+
     add(Platform(0, 900, size.x, 64));
     add(Platform(16, 80, 128, 64));
     add(Platform(128, 300, 128, 64));
@@ -60,6 +89,7 @@ class SpaceShooterGame extends FlameGame
     player.width = 50;
     player.height = 100;
     add(player);
+    camera.followComponent(player);
 
     final zombieSprite = await Future.wait(
       List.generate(3, (i) => loadSprite("zombie${i + 1}.png")),
