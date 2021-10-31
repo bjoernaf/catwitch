@@ -1,0 +1,15 @@
+CATWITCH
+
+A game about a witch, a cat, and some zombies. It is a platform game. You play
+as the witch, and the goal is to find your cat. Stay away from the zombies, they
+hurt you, and if you are exposed to their precense for a long period of time,
+you die. Reload page to restart if you died. You can shoot magic missiles at the
+zombies to get rid of them, you might need multiple.
+
+Controls
+* Tap left and right side of window to move horizontally.
+* Tap bottom of screen to jump.
+* Tap middle of screen to shoot magic missiles
+
+
+Sources at https://bjoernaf.github.io/catwitch/
