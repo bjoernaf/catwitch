@@ -1,13 +1,11 @@
-import 'package:con/enemy.dart';
 import 'package:con/player.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 
+import 'animationstate.dart';
 import 'platform.dart';
 import 'shoot.dart';
-import 'animationstate.dart';
-import 'moveable.dart';
 
 class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
     with Hitbox, Collidable, HasGameRef {
@@ -22,7 +20,7 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
   double movementSpeed = 1;
   bool jumping = false;
   Collidable? currentCollide;
-  Shoot? shot;
+  Shot? shot;
   double shotTimeout = 1;
   double invulnerability = 0;
   static const double maxInvulnerability = 1;
@@ -84,7 +82,7 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
         if (!facingRight) {
           step = -1;
         }
-        shot?.position.x = position.x + step * size.x/2;
+        shot?.position.x = position.x + step * size.x / 2;
         shot?.position.y = position.y;
         gameRef.add(shot!);
         shotTimeout = maxShotTimeout;
@@ -161,4 +159,3 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
     removeFromParent();
   }
 }
-

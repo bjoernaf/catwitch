@@ -5,32 +5,31 @@ import 'moveable.dart';
 import 'shoot.dart';
 
 class Player extends MoveAndCollide {
+  late final List<Sprite> shotSprites;
+
   Player(Map<AnimationState, SpriteAnimation> animations)
       : super(animations, 20);
 
-  late final Sprite shoot1;
-  late final Sprite shoot2;
-  late final Sprite shoot3;
-
-  Map<AnimationState, SpriteAnimation> getShoot() {
-    final flyingShotAnimation = SpriteAnimation.spriteList(
+  Map<AnimationState, SpriteAnimation> getShot() {
+    final shotAnimations = SpriteAnimation.spriteList(
       [
-        shoot1,
-        shoot2,
-        shoot3,
-        shoot2,
+        shotSprites[0],
+        shotSprites[1],
+        shotSprites[2],
+        shotSprites[1],
+        shotSprites[0],
       ],
       stepTime: 0.1,
     );
-    return {AnimationState.idle: flyingShotAnimation};
+    return {AnimationState.idle: shotAnimations};
   }
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    shoot1 = await gameRef.loadSprite("shot.png");
-    shoot2 = await gameRef.loadSprite("shot.png");
-    shoot3 = await gameRef.loadSprite("shot.png");
+    shotSprites = await Future.wait(
+      List.generate(3, (i) => gameRef.loadSprite("shot${i + 1}.png")),
+    );
     current = AnimationState.idle;
     life = 50;
     movementSpeed = 2;
@@ -42,7 +41,7 @@ class Player extends MoveAndCollide {
     if (facingRight) {
       speed *= -1;
     }
-    shot = Shoot(getShoot(), speed, 10, false);
+    shot = Shot(getShot(), speed, 10, false);
     animations[AnimationState.shooting]?.reset();
     current = AnimationState.shooting;
     shot?.width = size.x;
