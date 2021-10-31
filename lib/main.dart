@@ -3,18 +3,17 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
-import 'enemy.dart';
-import "moveable.dart";
-import 'platform.dart';
-import 'player.dart';
 import 'animationstate.dart';
 import 'cat.dart';
+import 'enemy.dart';
+import 'platform.dart';
+import 'player.dart';
 
-enum tapType {none, left, right, jump, shoot}
+enum tapType { none, left, right, jump, shoot }
 
 class SpaceShooterGame extends FlameGame
     with HasCollidables, MultiTouchTapDetector {
-  late final Player A;
+  late final Player player;
 
   @override
   Future<void> onLoad() async {
@@ -24,6 +23,7 @@ class SpaceShooterGame extends FlameGame
     add(Platform(16, 80, 128, 64));
     add(Platform(128, 300, 128, 64));
     add(Platform(356, 500, 128, 64));
+    add(Platform(size.x / 2, 500, 128, 64));
     add(Platform((size.x / 2 - 20), 700, 128, 64));
 
     final playerIdleSprite = await loadSprite("witch.png");
@@ -31,22 +31,21 @@ class SpaceShooterGame extends FlameGame
       [playerIdleSprite],
       stepTime: double.infinity,
     );
-    //TODO: make loop
-    final playerShooting1 = await loadSprite("witchshooting1.png");
-    final playerShooting2 = await loadSprite("witchshooting2.png");
-    final playerShooting3 = await loadSprite("witchshooting3.png");
-    final playerShooting4 = await loadSprite("witchshooting4.png");
-    final playerShooting5 = await loadSprite("witchshooting5.png");
+
+    final shootingAnimations = await Future.wait(
+      List.generate(5, (i) => loadSprite("witchshooting${i + 1}.png")),
+    );
     final playerShootingAnimation = SpriteAnimation.spriteList(
       [
-        playerShooting1,
-        playerShooting2,
-        playerShooting3,
-        playerShooting4,
-        playerShooting5,
-        playerShooting4,
-        playerShooting3,
-        playerShooting2,
+        shootingAnimations[0],
+        shootingAnimations[1],
+        shootingAnimations[2],
+        shootingAnimations[3],
+        shootingAnimations[4],
+        shootingAnimations[3],
+        shootingAnimations[2],
+        shootingAnimations[1],
+        shootingAnimations[0],
       ],
       stepTime: 0.1,
       loop: false,
@@ -55,28 +54,55 @@ class SpaceShooterGame extends FlameGame
       AnimationState.idle: playerIdleAnimation,
       AnimationState.shooting: playerShootingAnimation
     };
-    A = Player(playerAnimations);
-    A.position.y = 200;
-    A.position.x = size.x / 2;
-    A.width = 50;
-    A.height = 100;
-    add(A);
+    player = Player(playerAnimations);
+    player.position.y = 200;
+    player.position.x = size.x / 2;
+    player.width = 50;
+    player.height = 100;
+    add(player);
 
-    final zombieSprite = await loadSprite("zombie.png");
-    final zombieAnimation =
-        SpriteAnimation.spriteList([zombieSprite], stepTime: double.infinity);
-    final zombieAnimations = {AnimationState.idle: zombieAnimation};
-    add(ZombieEnemy(zombieAnimations, size.x / 2, size.y / 2, 50, 100));
+    final zombieSprite = await Future.wait(
+      List.generate(3, (i) => loadSprite("zombie${i + 1}.png")),
+    );
+    final zombieWalkingAnimations = SpriteAnimation.spriteList(
+      [
+        zombieSprite[0],
+        zombieSprite[1],
+        zombieSprite[2],
+        zombieSprite[1],
+        zombieSprite[0],
+      ],
+      stepTime: 0.2,
+    );
+    final zombieAnimations = {
+      AnimationState.idle: zombieWalkingAnimations,
+    };
+    //add(ZombieEnemy(zombieAnimations, size.x / 2, size.y / 2, 50, 100));
     add(ZombieEnemy(zombieAnimations, 16, 0, 50, 100));
     add(ZombieEnemy(zombieAnimations, 128, 100, 50, 100));
     add(ZombieEnemy(zombieAnimations, 256, 300, 50, 100));
 
-    final catSprite = await loadSprite("cat.png");
-    final catAnimation =
-        SpriteAnimation.spriteList([catSprite], stepTime: double.infinity);
-    final catAnimations = {AnimationState.idle: catAnimation};
-    
-    add(Cat(catAnimations, 700, 300, 50, 100));
+    final catSprite = await Future.wait(
+      List.generate(5, (i) => loadSprite("cat${i + 1}.png")),
+    );
+    final catTailAnimations = SpriteAnimation.spriteList(
+      [
+        catSprite[0],
+        catSprite[1],
+        catSprite[2],
+        catSprite[1],
+        catSprite[0],
+        catSprite[3],
+        catSprite[4],
+        catSprite[3],
+        catSprite[0],
+      ],
+      stepTime: 0.1,
+    );
+    final catAnimations = {
+      AnimationState.idle: catTailAnimations,
+    };
+    add(Cat(catAnimations, 700, 300, 492 / 10, 630 / 10));
   }
 
   final Map<int, tapType> taps = {};
@@ -86,17 +112,18 @@ class SpaceShooterGame extends FlameGame
     double y = ti.eventPosition.global.y;
 
     if (x < size.x / 3) {
-      A.moveLeft(true);
+      player.moveLeft(true);
       taps[pointerId] = tapType.left;
     } else if (x > size.x * 2 / 3) {
-      A.moveRight(true);
+      player.moveRight(true);
       taps[pointerId] = tapType.right;
     } else if (y > size.y * 4.0 / 5.0) {
-      A.jump();
+      player.jump();
       taps[pointerId] = tapType.jump;
-    } else if (x >= size.x / 3 && x <=size.x * 2 / 3 &&
-               y <= size.y * 4.0 / 5.0) {
-      A.shoot();
+    } else if (x >= size.x / 3 &&
+        x <= size.x * 2 / 3 &&
+        y <= size.y * 4.0 / 5.0) {
+      player.shoot();
       taps[pointerId] = tapType.shoot;
     }
   }
@@ -108,9 +135,9 @@ class SpaceShooterGame extends FlameGame
     }
 
     if (type == tapType.left) {
-      A.moveLeft(false);
+      player.moveLeft(false);
     } else if (type == tapType.right) {
-      A.moveRight(false);
+      player.moveRight(false);
     }
 
     taps.remove(pointerId);
@@ -123,7 +150,6 @@ class SpaceShooterGame extends FlameGame
   void onTapCancel(int pointerId) {
     handleTapEnding(pointerId);
   }
-
 }
 
 void main() {

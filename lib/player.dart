@@ -1,8 +1,7 @@
 import 'package:flame/components.dart';
-import 'package:flame/geometry.dart';
 
-import 'moveable.dart';
 import 'animationstate.dart';
+import 'moveable.dart';
 import 'shoot.dart';
 
 class Player extends MoveAndCollide {
@@ -22,21 +21,22 @@ class Player extends MoveAndCollide {
         shoot2,
       ],
       stepTime: 0.1,
-      );
+    );
     return {AnimationState.idle: flyingShotAnimation};
   }
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    shoot1 = await gameRef.loadSprite("playershoot1.png");
-    shoot2 = await gameRef.loadSprite("playershoot2.png");
-    shoot3 = await gameRef.loadSprite("playershoot3.png");
+    shoot1 = await gameRef.loadSprite("shot.png");
+    shoot2 = await gameRef.loadSprite("shot.png");
+    shoot3 = await gameRef.loadSprite("shot.png");
     current = AnimationState.idle;
     life = 50;
   }
 
-  @override void shoot() {
+  @override
+  void shoot() {
     int speed = -100;
     if (facingRight) {
       speed *= -1;
@@ -44,7 +44,7 @@ class Player extends MoveAndCollide {
     shot = Shoot(getShoot(), speed, 10, false);
     animations[AnimationState.shooting]?.reset();
     current = AnimationState.shooting;
-    shot?.width = size.x / 4;
+    shot?.width = size.x;
     shot?.height = size.x / 4;
     super.shoot();
   }
