@@ -10,6 +10,7 @@ class Shot extends MoveAndCollide {
   late int speed;
   late int dmg;
   late bool monsterShoot;
+  late double lifeTime;
 
   Shot(Map<AnimationState, SpriteAnimation> animations, int inSpeed,
       int inDamage, bool inMonster)
@@ -18,12 +19,17 @@ class Shot extends MoveAndCollide {
     dmg = inDamage;
     monsterShoot = inMonster;
     falling = false;
+    lifeTime = 5;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
     position.x += speed * dt;
+    lifeTime -= dt;
+    if (lifeTime < 0) {
+      removeFromParent();
+    }
   }
 
   @override
