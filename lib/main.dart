@@ -93,25 +93,42 @@ class SpaceShooterGame extends FlameGame
       AnimationState.idle: zombieWalkingAnimations,
     };
 
-    final catSprite = await Future.wait(
+    final catSprites = await Future.wait(
       List.generate(5, (i) => loadSprite("cat${i + 1}.png")),
     );
     final catTailAnimations = SpriteAnimation.spriteList(
       [
-        catSprite[0],
-        catSprite[1],
-        catSprite[2],
-        catSprite[1],
-        catSprite[0],
-        catSprite[3],
-        catSprite[4],
-        catSprite[3],
-        catSprite[0],
+        catSprites[0],
+        catSprites[1],
+        catSprites[2],
+        catSprites[1],
+        catSprites[0],
+        catSprites[3],
+        catSprites[4],
+        catSprites[3],
+        catSprites[0],
+      ],
+      stepTime: 0.1,
+    );
+
+    final catAngrySprites = await Future.wait(
+      List.generate(7, (i) => loadSprite("catAngry${i + 1}.png")),
+    );
+    final catAngryAnimations = SpriteAnimation.spriteList(
+      [
+        catAngrySprites[0],
+        catAngrySprites[1],
+        catAngrySprites[2],
+        catAngrySprites[3],
+        catAngrySprites[4],
+        catAngrySprites[5],
+        catAngrySprites[6],
       ],
       stepTime: 0.1,
     );
     final catAnimations = {
       AnimationState.idle: catTailAnimations,
+      AnimationState.angry: catAngryAnimations,
     };
 
     const int boardSize = 2000;
