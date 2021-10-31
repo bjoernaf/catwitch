@@ -6,13 +6,14 @@ import 'package:flame/game.dart';
 import 'animationstate.dart';
 import 'moveable.dart';
 
-class Shoot extends MoveAndCollide {
+class Shot extends MoveAndCollide {
   late int speed;
   late int dmg;
   late bool monsterShoot;
 
-  Shoot(Map<AnimationState, SpriteAnimation> animations, int inSpeed, 
-        int inDamage, bool inMonster) : super(animations, 20) {
+  Shot(Map<AnimationState, SpriteAnimation> animations, int inSpeed,
+      int inDamage, bool inMonster)
+      : super(animations, 20) {
     speed = inSpeed;
     dmg = inDamage;
     monsterShoot = inMonster;
