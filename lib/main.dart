@@ -1,8 +1,9 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 import 'animationstate.dart';
 import 'cat.dart';
@@ -38,7 +39,6 @@ class SpaceShooterGame extends FlameGame
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    debugMode = true;
 
     final sprite = await Sprite.load('bg.png');
     Background bg = Background(size, sprite);
@@ -141,12 +141,16 @@ class SpaceShooterGame extends FlameGame
     Platform first = Platform(100, 100, 100, platformHeight as double);
     add(first);
 
-    Random rng = new Random();
+    Random rng = Random();
     double w = 100;
     double lastX = 0;
     double lastY = 0;
     for (int y = 0; y < boardSize; y += (w as int) + 110) {
-      for (int x = 200 + minDistance; x < boardSize; x += (w as int) + minDistance + (rng.nextInt(maxDistance - minDistance) as int)) {
+      for (int x = 200 + minDistance;
+          x < boardSize;
+          x += (w as int) +
+              minDistance +
+              (rng.nextInt(maxDistance - minDistance))) {
         w = minWidth + (rng.nextInt(maxWidth - minWidth) as double);
         lastX = x + (rng.nextInt(60) as double);
         lastY = y as double;
