@@ -12,4 +12,11 @@ class Platform extends SpriteComponent with Hitbox, Collidable {
     sprite = await Sprite.load("platform1.png");
     collidableType = CollidableType.passive;
   }
+
+  Platform(double x, double y, double w, double h) {
+    width = w;
+    height = h;
+    position.x = x;
+    position.y = y;
+  }
 }

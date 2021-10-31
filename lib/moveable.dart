@@ -39,6 +39,7 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
     await super.onLoad();
     final shape = HitboxRectangle();
     addHitbox(shape);
+    anchor = Anchor.center;
   }
 
   @override
@@ -113,6 +114,14 @@ class MoveAndCollide extends SpriteAnimationGroupComponent<AnimationState>
     currentCollide = null;
     if (other is Platform) {
       falling = true;
+    }
+  }
+
+  void setMoveAnimation(bool moving) {
+    if (moving) {
+      current = AnimationState.running;
+    } else {
+      current = AnimationState.idle;
     }
   }
 

@@ -29,7 +29,8 @@ class GeneralEnemy extends MoveAndCollide {
 
 class ZombieEnemy extends GeneralEnemy {
   ZombieEnemy(
-    Map<AnimationState, SpriteAnimation> animations, {
+    Map<AnimationState, SpriteAnimation> animations,
+    double x, double y, double w, double h, {
     int life = 20,
     int spriteSize = 1,
     int attackDamage = 5,
@@ -39,7 +40,12 @@ class ZombieEnemy extends GeneralEnemy {
           spriteSize,
           attackDamage,
           life,
-        );
+        ) {
+    position.x = x;
+    position.y = y;
+    width = w;
+    height = h;
+  }
 
   @override
   Future<void> onLoad() async {

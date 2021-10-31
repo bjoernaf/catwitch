@@ -19,27 +19,11 @@ class SpaceShooterGame extends FlameGame
   Future<void> onLoad() async {
     await super.onLoad();
     debugMode = true;
-    final Platform P1 = Platform();
-    P1.width = 64 * 2;
-    P1.height = 32 * 2;
-    P1.position.x = (size.x / 2 - 20); //* 2;
-    P1.position.y = 400 * 2;
-
-    final Platform P2 = Platform();
-    P2.width = 64 * 2;
-    P2.height = 32 * 2;
-    P2.position.x = 8 * 2;
-    P2.position.y = 20 * 2;
-
-    final Platform P3 = Platform();
-    P3.width = 64 * 2;
-    P3.height = 32 * 2;
-    P3.position.x = (size.x / 2 + 20); //* 2;
-    P3.position.y = 300 * 2;
-
-    add(P1);
-    add(P2);
-    add(P3);
+    add(Platform(0, 900, size.x, 64));
+    add(Platform(16, 80, 128, 64));
+    add(Platform(128, 300, 128, 64));
+    add(Platform(356, 500, 128, 64));
+    add(Platform((size.x / 2 - 20), 700, 128, 64));
 
     final playerIdleSprite = await loadSprite("witch.png");
     final playerIdleAnimation = SpriteAnimation.spriteList(
@@ -74,19 +58,17 @@ class SpaceShooterGame extends FlameGame
     A.position.x = size.x / 2;
     A.width = 50;
     A.height = 100;
-    A.anchor = Anchor.center;
+    add(A);
+
     final zombieSprite = await loadSprite("zombie.png");
     final zombieAnimation =
         SpriteAnimation.spriteList([zombieSprite], stepTime: double.infinity);
     final zombieAnimations = {AnimationState.idle: zombieAnimation};
-    final PositionComponent B = ZombieEnemy(zombieAnimations);
-    B.position = size / 2;
-    B.width = 50;
-    B.height = 100;
-    B.anchor = Anchor.center;
+    add(ZombieEnemy(zombieAnimations, size.x / 2, size.y / 2, 50, 100));
+    add(ZombieEnemy(zombieAnimations, 16, 0, 50, 100));
+    add(ZombieEnemy(zombieAnimations, 128, 100, 50, 100));
+    add(ZombieEnemy(zombieAnimations, 256, 300, 50, 100));
 
-    add(A);
-    add(B);
   }
 
   final Map<int, tapType> taps = {};
