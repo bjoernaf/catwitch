@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 import 'animationstate.dart';
 import 'cat.dart';
@@ -45,13 +46,6 @@ class SpaceShooterGame extends FlameGame
     bg.position.y = 0;
     add(bg);
 
-    add(Platform(0, 900, size.x, 64));
-    add(Platform(16, 80, 128, 64));
-    add(Platform(128, 300, 128, 64));
-    add(Platform(356, 500, 128, 64));
-    add(Platform(size.x / 2, 500, 128, 64));
-    add(Platform((size.x / 2 - 20), 700, 128, 64));
-
     final playerIdleSprite = await loadSprite("witch.png");
     final playerIdleAnimation = SpriteAnimation.spriteList(
       [playerIdleSprite],
@@ -81,12 +75,6 @@ class SpaceShooterGame extends FlameGame
       AnimationState.shooting: playerShootingAnimation
     };
     player = Player(playerAnimations);
-    player.position.y = 200;
-    player.position.x = size.x / 2;
-    player.width = 50;
-    player.height = 100;
-    add(player);
-    camera.followComponent(player);
 
     final zombieSprite = await Future.wait(
       List.generate(3, (i) => loadSprite("zombie${i + 1}.png")),
@@ -104,10 +92,6 @@ class SpaceShooterGame extends FlameGame
     final zombieAnimations = {
       AnimationState.idle: zombieWalkingAnimations,
     };
-    //add(ZombieEnemy(zombieAnimations, size.x / 2, size.y / 2, 50, 100));
-    add(ZombieEnemy(zombieAnimations, 16, 0, 50, 100));
-    add(ZombieEnemy(zombieAnimations, 128, 100, 50, 100));
-    add(ZombieEnemy(zombieAnimations, 256, 300, 50, 100));
 
     final catSprite = await Future.wait(
       List.generate(5, (i) => loadSprite("cat${i + 1}.png")),
@@ -129,7 +113,38 @@ class SpaceShooterGame extends FlameGame
     final catAnimations = {
       AnimationState.idle: catTailAnimations,
     };
-    add(Cat(catAnimations, 700, 300, 492 / 10, 630 / 10));
+
+    const int boardSize = 2000;
+    const int minDistance = 200;
+    const int maxDistance = 300;
+    const int minWidth = 100;
+    const int maxWidth = 200;
+    const int platformHeight = 32;
+
+    Platform first = Platform(100, 100, 100, platformHeight as double);
+    add(first);
+
+    Random rng = new Random();
+    double w = 100;
+    double lastX = 0;
+    double lastY = 0;
+    for (int y = 0; y < boardSize; y += (w as int) + 110) {
+      for (int x = 200 + minDistance; x < boardSize; x += (w as int) + minDistance + (rng.nextInt(maxDistance - minDistance) as int)) {
+        w = minWidth + (rng.nextInt(maxWidth - minWidth) as double);
+        lastX = x + (rng.nextInt(60) as double);
+        lastY = y as double;
+        Platform current = Platform(lastX, lastY, w, platformHeight as double);
+        add(ZombieEnemy(zombieAnimations, lastX + 10, lastY - 80, 50, 100));
+        add(current);
+      }
+    }
+    add(Cat(catAnimations, lastX + 10, lastY - 80, 492 / 10, 630 / 10));
+    player.position.y = 50;
+    player.position.x = 150;
+    player.width = 50;
+    player.height = 100;
+    add(player);
+    camera.followComponent(player);
   }
 
   final Map<int, tapType> taps = {};

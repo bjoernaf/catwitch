@@ -33,6 +33,7 @@ class Player extends MoveAndCollide {
     shoot3 = await gameRef.loadSprite("shot.png");
     current = AnimationState.idle;
     life = 50;
+    movementSpeed = 2;
   }
 
   @override
