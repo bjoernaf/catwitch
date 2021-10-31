@@ -42,6 +42,7 @@ class Player extends MoveAndCollide {
       speed *= -1;
     }
     shot = Shoot(getShoot(), speed, 10, false);
+    animations[AnimationState.shooting]?.reset();
     current = AnimationState.shooting;
     shot?.width = size.x / 4;
     shot?.height = size.x / 4;

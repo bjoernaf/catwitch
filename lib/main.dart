@@ -8,6 +8,7 @@ import "moveable.dart";
 import 'platform.dart';
 import 'player.dart';
 import 'animationstate.dart';
+import 'cat.dart';
 
 enum tapType {none, left, right, jump, shoot}
 
@@ -48,6 +49,7 @@ class SpaceShooterGame extends FlameGame
         playerShooting2,
       ],
       stepTime: 0.1,
+      loop: false,
     );
     final playerAnimations = {
       AnimationState.idle: playerIdleAnimation,
@@ -69,6 +71,12 @@ class SpaceShooterGame extends FlameGame
     add(ZombieEnemy(zombieAnimations, 128, 100, 50, 100));
     add(ZombieEnemy(zombieAnimations, 256, 300, 50, 100));
 
+    final catSprite = await loadSprite("cat.png");
+    final catAnimation =
+        SpriteAnimation.spriteList([catSprite], stepTime: double.infinity);
+    final catAnimations = {AnimationState.idle: catAnimation};
+    
+    add(Cat(catAnimations, 700, 300, 50, 100));
   }
 
   final Map<int, tapType> taps = {};
